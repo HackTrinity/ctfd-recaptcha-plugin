@@ -1,5 +1,7 @@
 from os import environ
 
+from CTFd.config import var_or_secret
+
 def config(app):
     '''
     Determines whether or not to use the recaptcha feature. Set to False for debugging or otherwise turning off recaptcha.
@@ -10,7 +12,7 @@ def config(app):
     RECAPTCHA_SECRET is the secret key provided to you by Google for reCaptcha
     You may either set the RECAPTCHA_SECRET env variable or save it here in this file
     '''
-    app.config['RECAPTCHA_SECRET'] = environ.get('RECAPTCHA_SECRET', 'INVALID_SECRET')
+    app.config['RECAPTCHA_SECRET'] = var_or_secret('RECAPTCHA_SECRET', 'INVALID_SECRET')
 
     '''
     RECAPTCHA_SITE_KEY is the public site key provided to you by Google for reCaptcha
