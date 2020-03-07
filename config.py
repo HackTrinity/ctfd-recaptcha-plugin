@@ -1,10 +1,5 @@
 from os import environ
 
-'''
-VERIFY_REMOTE_IP should be True if you want to include the client ip address in the verification step.
-'''
-VERIFY_REMOTE_IP = False
-
 def config(app):
     '''
     Determines whether or not to use the recaptcha feature. Set to False for debugging or otherwise turning off recaptcha.
@@ -29,8 +24,12 @@ def config(app):
     This works well if the registration template is not heavily modified, but set this to false if you want to control where the
     check box appears
     '''
-    app.config['RECAPTCHA_INSERT_TAGS'] = True
+    app.config['RECAPTCHA_INSERT_TAGS'] = environ.get('RECAPTCHA_INSERT_TAGS', 'True').lower() == 'true'
 
+    '''
+    VERIFY_REMOTE_IP should be True if you want to include the client ip address in the verification step.
+    '''
+    VERIFY_REMOTE_IP = environ.get('RECAPTCHA_VERIFY_REMOTE_IP', 'True').lower() == 'true'
 
     if VERIFY_REMOTE_IP:
         app.config['RECAPTCHA_VERIFY_URL'] = 'https://www.google.com/recaptcha/api/siteverify?secret={secret:s}&response={response:s}&remoteip={remoteip:s}'
